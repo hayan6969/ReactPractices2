@@ -10,6 +10,12 @@ const [counter,setCounter]=useState(0)
 
 const addValue=()=>{
   setCounter(counter+1)
+
+  //to update it mulitple time using previous value
+  // setCounter((prev)=>prev+1)
+  // setCounter((prev)=>prev+1)
+
+  //because if u just repeat the setCounter(counter+1), react fibre will take it as a similar job and make a single batch of it so the counter will only be updated one time
 }
 const removeValue=()=>{
   if(counter>0){

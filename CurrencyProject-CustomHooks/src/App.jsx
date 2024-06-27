@@ -8,10 +8,6 @@ function App() {
   const [from, setFrom] = useState('usd')
   const [to, setTo] = useState('pkr')
   const [convertedAmount, setConvertedAmount] = useState(0)
-  const [selectCurrency, setSelectCurrency] = useState('usd')
-  const onCurrencyChange=(val)=>{
-    setSelectCurrency(val)
-  }
 
   const currencyInfo = useCurrencyInfo(from)
 

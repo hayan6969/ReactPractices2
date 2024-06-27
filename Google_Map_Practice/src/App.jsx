@@ -13,6 +13,18 @@ import {
 
 
 function App() {
+  const [img, setImg] = useState()
+
+  const handleChange=(e)=>{
+    console.log(e.target.files)
+    const data = new FileReader()
+    data.addEventListener('load',()=>{
+setImg(data.result)
+    })
+    data.readAsDataURL(e.target.files[0])
+  };
+  console.log(img)
+
   const [count, setCount] = useState(0)
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState({ lat: 37.7749, lng: -122.4178 })
@@ -40,7 +52,7 @@ setPosition({lat:55.378051,lng:-3.435973})
   }
 
   return (
-    <div className='w-full text-white text-2xl flex flex-col justify-around items-center h-screen bg-black'>
+    <div className='w-full h-auto text-white text-2xl flex flex-col justify-around items-center  bg-black'>
       <APIProvider apiKey='AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg'>
         <div><p>Google map testing</p></div>
         <div className='flex gap-x-10 items-center'>
@@ -66,8 +78,18 @@ setPosition({lat:55.378051,lng:-3.435973})
   </Map>
 </div>
       </APIProvider>
+
+      <div className='h-[500px] border-2 border-white w-full '>
+
+        <input type="file" onChange={handleChange}/> 
+
+        {
+          img && <img src={img} alt="image" className='w-full h-full'/> 
+        }
+
+      </div>
     </div>
   )
-}
+} //add image and preview
 
 export default App

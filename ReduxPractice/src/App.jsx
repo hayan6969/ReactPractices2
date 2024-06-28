@@ -7,14 +7,18 @@ import Todos from './components/Todos'
 
 function App() {
 
+  const [editEnabled,setEditEnabled]=useState(false)
+  const [editId,setEditId]=useState(null)
+  const [editText,setEditText]=useState('')
+
   return (
    <div className='h-screen w-screen flex flex-col justify-center items-center bg-black'>
   
   <h1 className='text-4xl text-white text-center font-bold'>React Redux</h1>
- <div className='w-full flex flex-col items-center'> <AddTodo/>
+ <div className='w-full flex flex-col items-center'> <AddTodo editId={editId} editText={editText} setEditEnabled={setEditEnabled} editEnabled={editEnabled}/>
  </div>
 <div className='w-full px-4'>
-<Todos  />
+<Todos setEditEnabled={setEditEnabled} setEditId={setEditId} setEditText={setEditText} />
 </div>
 
    </div>

@@ -1,21 +1,40 @@
 import React from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { removeTodo } from '../store/features/todo/todoSlice'
+import editt from '../assets/editt.png'
+import { useState,useRef } from 'react'
 
-function Todos() {
+function Todos({setEditEnabled,setEditId,setEditText}) {
 
     const todos=useSelector(state=>state.todos)
     const dispatch=useDispatch()
+    const inputRef=useRef(null)
+    const handleEdit=(id,text)=>{
+        setEditId(id)
+        setEditText(text)
+        console.log('the text is',text)
+      setEditEnabled((prev)=>!prev)
+   
+   }
+       
+    
   return (
     <>
-    <div>Todos</div>
+    <div className='text-white'>Todos</div>
     <ul className="list-none">
         {todos.map((todo) => (
           <li
             className="mt-4 flex justify-between items-center bg-zinc-800 px-4 py-2 rounded"
             key={todo.id}
-          >
-            <div className='text-white'>{todo.text}</div>
+          ><div className='text-white text-xl '>{todo.text}</div>
+            <button
+              onClick={()=>{handleEdit(todo.id,todo.text)}}
+            
+            
+              className="text-white  bg-red-500  border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded text-md"
+            >
+              Edit
+            </button>
             <button
              onClick={() => dispatch(removeTodo(todo.id))}
               className="text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded text-md"

@@ -9,14 +9,16 @@ export default function Protected({children,authentication=true}) {
     const authStatus = useSelector(state=>state.auth.status)
 
     useEffect(()=>{
-if(authentication && authStatus !== authentication){
+      console.log('authStatus was changed : ',authStatus)
+if(authentication && authStatus !== authentication){  
+  console.log('logout performed directing to login page')
    Navigate('/login')
 }
 else if(!authentication && authStatus !== authentication){
 Navigate('/')
 }
 setLoader(false)
-    },[authStatus,Navigate,authentication])
+    },[authStatus, authentication, Navigate])
 
   return (
     loader?<h1>loading...</h1>:<>{children}</>

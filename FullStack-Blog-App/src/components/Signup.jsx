@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import authService from '../appwrite/auth'
 import { set, useForm } from 'react-hook-form'  
 import {Button,Input,Logo} from '../components/index' 
-import { Navigate } from 'react-router-dom'
+import {useNavigate,Link} from 'react-router-dom'
 
 function Signup() {
     const Navigate=useNavigate()

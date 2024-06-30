@@ -11,7 +11,7 @@ import SignupPage from './pages/SignupPage'
 import Home from './pages/Home'
 import Post from './pages/Post'
 import EditPost from './pages/EditPost'
-import AllPost from './pages/AllPost'
+import MyPosts from './pages/MyPosts'
 import Protected from './components/AuthLayout'
 import AddPost from './pages/AddPost'
 
@@ -38,7 +38,10 @@ useEffect(()=>{
     <div className='w-full block'>
       <Header />
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Protected >
+          {" "}
+          <Home />
+        </Protected>} />
         <Route path='/login' element={<Protected authentication={false}>
           <LoginPage />
         </Protected>} />
@@ -46,16 +49,16 @@ useEffect(()=>{
           <SignupPage />
         </Protected>} />
         <Route path='/post/:slug' element={<Post />} />
-        <Route path='/edit-post/:slug' element={<Protected authentication>
+        <Route path='/edit-post/:slug' element={<Protected >
           {" "}
           <EditPost />
         </Protected>} />
-        <Route path='/all-posts' element={<Protected authentication>
+        <Route path='/all-posts' element={<Protected >
           {" "}
-          <AllPost />
+          <MyPosts />
         </Protected>} /> 
         <Route path='/add-post' element={
-          <Protected authentication>
+          <Protected >
           {" "}
           <AddPost />
         </Protected>

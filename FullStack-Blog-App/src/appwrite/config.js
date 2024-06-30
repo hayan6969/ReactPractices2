@@ -15,34 +15,34 @@ export class Service {
     this.bucket = new Storage(this.client);
   }
 
-  async createPost({ title, slug, content, featuredImage, status, userId }) {
+  async createPost({ Title, slug, Content, featuredImage, status, userId }) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
         slug,
         {
-          title,
-          content,
+          Title,
+          Content,
           featuredImage,
           status,
           userId,
         }
-      );
+      )
     } catch (error) {
       console.log("Service :: createPost :: error :: ", error);
     }
   }
 
-  async updatePost(slug, { title, content, featuredImage, status }) {
+  async updatePost(slug, { Title, Content, featuredImage, status }) {
     try {
       await this.databases.updateDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
         slug,
         {
-          title,
-          content,
+          Title,
+          Content,
           featuredImage,
           status,
         }
@@ -130,6 +130,10 @@ export class Service {
     } catch (error) {
         console.log("Service :: getFilePreview :: error :: ", error);
     }
+  }
+
+  getImagePreview(fileId){
+    return `https://cloud.appwrite.io/v1/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/preview?project=${conf.appwriteProjectId}`
   }
 }
 

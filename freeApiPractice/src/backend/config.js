@@ -147,6 +147,31 @@ export class Service {
         }
     }
 
+async createGroupChat(token){
+    try {
+        
+        const authaxios = axios.create({
+            baseURL: "http://localhost:8080/api/v1/",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return await authaxios.post(`/chat-app/chats/group`,{
+            
+                name: "discussion group",
+                participants: [
+                  "66865d7a4ac14e550ea5cc0f",
+                  "6686814f4ac14e550ea5cd93"
+                ]
+              
+        })
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
     async getAllChats(token){
         try {
             const authaxios = axios.create({

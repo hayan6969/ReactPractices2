@@ -121,6 +121,15 @@ useEffect(()=>{
       console.log(error)
     }
   }
+
+  const createGroupChat=async()=>{ 
+try {
+  await service.createGroupChat(token)
+} catch (error) {
+  console.log(error)
+}
+
+   }
   
   const sendMessage=async()=>{
 try {
@@ -224,6 +233,7 @@ try {
     <input ref={messageRef}  type="text" placeholder='type message' />
     <button onClick={sendMessage} className='border-2 p-2 mt-2'>Send message</button>
     <button onClick={getMessages} className='border-2 p-2 mt-2'>get chats</button>
+    <button onClick={createGroupChat} className='border-2 p-2 mt-2'>create Group chat</button>
 
     </div>
     <div className='border-2 border-black mt-2 p-1 '>

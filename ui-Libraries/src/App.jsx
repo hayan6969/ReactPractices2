@@ -12,8 +12,15 @@ import DockDemo from './components/DockDemo'
 import Mult from './components/Mult'
 import Sample from './components/Sample'
 import useLocalStorage from './hooks/useLocalStorage'
+import { useForm } from 'react-hook-form'
+import { Input } from './components/ui/input'
+import { Label } from './components/ui/label'
+import CustomInput from './components/CustomInput'
+import { Button } from './components/ui/button'
+
 
 function App() {
+  const {register,handleSubmit,control} = useForm()
   console.log('App rendered',Math.random()  )
   const inputRef=useRef()
   const [loggedIn,setLoggedIn]=useState(false)
@@ -64,6 +71,20 @@ useLocalStorage('set','data',inputRef.current.value)
 <button onClick={multiply}>Click to multiply by 5</button>
 
 <h2>Multiplied Value: {multipliedValue}</h2>
+
+
+<div >
+<form onSubmit={handleSubmit((data)=>{
+  console.log(data)
+})}>
+  <div className='flex flex-col justify-between gap-y-7 items-center'>
+  <Label>Enter name</Label>
+  <Input   placeholder="Enter Name" {...register("name",{required:true})}/>
+  <CustomInput name='password' control={control}/>
+  <Button type='submit'>Save</Button>
+  </div>
+</form>
+</div>
 
 
 

@@ -60,7 +60,7 @@ function PostForm({ postData }) {
         .replace(/[^a-zA-Z\d\s]+/g, "-") //replace all non-alphanumeric characters with -
         .replace(/\s/g, "-"); //replace all spaces with -
 
-    return "";
+    return ""; //else return empty string
   }, []);
 
   useEffect(() => {

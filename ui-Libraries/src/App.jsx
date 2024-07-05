@@ -17,7 +17,8 @@ import { Input } from './components/ui/input'
 import { Label } from './components/ui/label'
 import CustomInput from './components/CustomInput'
 import { Button } from './components/ui/button'
-
+import  { BackgroundGradientAnimationDemo } from './components/Test'
+import { GlobeDemo } from './components/Test2'
 
 function App() {
   const {register,handleSubmit,control} = useForm()
@@ -57,7 +58,7 @@ useLocalStorage('set','data',inputRef.current.value)
 
   return (
 
-<div className='flex justify-center flex-col items-center p-10'>
+<div className=''>
 {/* <Sample label='Enter any data'  ref={inputRef}/>
 <button onClick={()=>{
   inputRef.current.select()
@@ -66,7 +67,7 @@ useLocalStorage('set','data',inputRef.current.value)
 <button onClick={display} className='border-2 border-black p-2 mt-5 rounded-xl font-poppins hover:bg-black hover:text-white'>Click to alert Data from local storage</button> */}
 
 
-<h1>Main Value: {value}</h1>
+{/* <h1>Main Value: {value}</h1>
 
 <button onClick={multiply}>Click to multiply by 5</button>
 
@@ -84,7 +85,11 @@ useLocalStorage('set','data',inputRef.current.value)
   <Button type='submit'>Save</Button>
   </div>
 </form>
-</div>
+</div> */}
+
+
+
+<GlobeDemo/>
 
 
 

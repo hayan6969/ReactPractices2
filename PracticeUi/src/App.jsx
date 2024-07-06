@@ -1,10 +1,19 @@
 import { useState } from 'react'
 import React from 'react'
-import { Input } from '@nextui-org/react'
-import { MailIcon } from './components/MailIcon'
+
 
 
 import './App.css'
+import { Button } from './components/ui/button';
+import { Loader2 } from 'lucide-react';
+import { LoginForm } from './components/Login';
+import { SignupForm } from './components/Signup';
+import { Route, Routes } from 'react-router-dom';
+import { Dashboard } from './components/Dashboard';
+import Products from './components/Products';
+import { Dash } from './components/Dash';
+import Books from './components/Books';
+import AuthLayout from './components/layouts/AuthLayout';
 
 
 
@@ -20,23 +29,23 @@ function App() {
   }, [value]);
 
   return (
-   <div className='  w-screen h-screen flex justify-center items-center overflow-hidden '>
+   <div className='  w-screen h-screen font-kanit flex justify-center items-center overflow-hidden '>
 
     
-
-     <Input
-          type="email"
-          label="Email"
-          placeholder="you@example.com"
-          className="w-[20%]"
-          labelPlacement="outside"
-          endContent={
-            <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-          }
-        />
-   
-   
-
+   <Routes  >
+    <Route path='/login' element={<LoginForm />} />
+    <Route path='/signup' element={<SignupForm />} />
+    <Route path='/' element={<AuthLayout>
+      <Dashboard/>
+    </AuthLayout>} >
+    <Route path='products' element={<AuthLayout>
+      <Books/>
+    </AuthLayout>} />
+    <Route path='dash' element={<AuthLayout>
+      <Dash/>
+    </AuthLayout>} />
+    </Route>
+   </Routes>
     </div>
 
   )

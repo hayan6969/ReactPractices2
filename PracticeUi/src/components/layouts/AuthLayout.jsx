@@ -3,7 +3,7 @@ import React,{useState,useEffect} from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-function AuthLayout({children,authentication=true}) {
+function AuthLayout({children,authentication=false}) {
     const Navigate = useNavigate()
     const [loader,setLoader] = useState(true)
     const authStatus = useSelector(state=>state.auth.status)
@@ -14,7 +14,7 @@ if(authentication && authStatus !== authentication){
   console.log('logout performed directing to login page')
    Navigate('/login')
 }
-else if(!authentication && authStatus !== authentication){ 
+else if(!authentication && authStatus !== authentication){
 Navigate('/')
 }
 setLoader(false)

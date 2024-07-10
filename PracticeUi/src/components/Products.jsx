@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from './ui/button'
+import Spline from '@splinetool/react-spline'
 
 
 

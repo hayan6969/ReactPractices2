@@ -12,7 +12,8 @@ import {
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-
+import { useDispatch } from "react-redux"
+import { logout } from "@/store/authSlice"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +27,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import authService from "@/appwrite/auth"
 
 export function Dashboard() {
+  const dispatch = useDispatch()
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -139,7 +141,10 @@ export function Dashboard() {
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={()=>{
                 console.log('logout')
-                authService.logout()
+                const check=authService.logout()
+                if(check){
+                  dispatch(logout())
+                }
               }}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

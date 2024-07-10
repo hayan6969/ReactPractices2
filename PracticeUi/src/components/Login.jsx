@@ -1,5 +1,5 @@
 import {Link,useNavigate} from "react-router-dom"
-
+import { useDispatch } from "react-redux"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -13,12 +13,29 @@ import { Label } from "@/components/ui/label"
 import { useEffect, useRef,useState } from "react"
 import authService from "@/appwrite/auth"
 import { Loader2 } from "lucide-react"
+import { login } from "@/store/authSlice"
 export function LoginForm() {
   const navigate=useNavigate()
   const [loading, setLoading] = useState(false)
   const emailRef = useRef()
   const passwordRef = useRef()
-
+  const dispatch = useDispatch()
+const onLogin=async()=>{
+  try {
+    setLoading(true)
+    const userData=await authService.login(emailRef.current.value,passwordRef.current.value)
+    if(userData){
+      const userData=await authService.getCurrentUser()
+      if(userData){
+        dispatch(login(userData))
+        navigate('/')
+      }
+    }
+  } catch (error) {
+    setLoading(false)
+    console.log(error)
+  }
+}
  
   return (
     <Card className="mx-auto w-full max-w-sm">
@@ -49,22 +66,7 @@ export function LoginForm() {
             </div>
             <Input id="password" ref={passwordRef} type="password" required />
           </div>
-          <Button disabled={loading} onClick={()=>{
-            setLoading(true)
-           try {
-           const userData= authService.login(emailRef.current.value,passwordRef.current.value)
-            if(userData){
-              const userData=authService.getCurrentUser()
-              if(userData){
-                navigate('/')
-              }
-            }
-           
-            
-           } catch (error) {
-            console.log(error)
-           }
-          }} type="submit" className="w-full">
+          <Button disabled={loading} onClick={onLogin} type="submit" className="w-full">
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Login"}
         
           </Button>

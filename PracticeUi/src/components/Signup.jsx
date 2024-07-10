@@ -32,10 +32,10 @@ const onSignup=async()=>{
     setLoading(true)
     const userData=await authService.createAccount(emailRef.current.value,passwordRef.current.value,nameRef.current.value)
     if(userData){
-      const userData=authService.getCurrentUser()
+      const userData=await authService.getCurrentUser()
       if(userData){
         console.log('the user Data is')
-        dispatch(login({userData}))
+        dispatch(login(userData))
 
         navigate('/')
       }

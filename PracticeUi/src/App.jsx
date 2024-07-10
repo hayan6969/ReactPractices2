@@ -41,7 +41,7 @@ function App() {
     <Route path='products' element={<AuthLayout>
       <Books/>
     </AuthLayout>} />
-    <Route path='dash' element={<AuthLayout>
+    <Route path='' element={<AuthLayout>
       <Dash/>
     </AuthLayout>} />
     </Route>

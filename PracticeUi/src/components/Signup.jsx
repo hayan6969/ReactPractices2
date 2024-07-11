@@ -1,6 +1,6 @@
 import { Link,useNavigate } from "react-router-dom"
 import authService from "@/appwrite/auth"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux"
 import { login } from "@/store/authSlice"
 
 
+
 export function SignupForm() {
   const dispatch = useDispatch()
   const navigate=useNavigate()
@@ -25,6 +26,7 @@ export function SignupForm() {
   const emailRef = useRef()
   const passwordRef = useRef()
   const nameRef = useRef()
+
 
 const onSignup=async()=>{
   try {
@@ -46,6 +48,8 @@ const onSignup=async()=>{
     console.log(error)
   }
 }
+
+
 
   return (
     <Card className="mx-auto w-full max-w-sm">

@@ -15,18 +15,20 @@ export class Service {
     this.bucket = new Storage(this.client);
   }
 
-  async createPost({ Title, slug, Content, featuredImage, status, userId }) {
+
+  async addBook({ name,genre,price,totalSale,createdAt,image }) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
-        slug,
+        ID.unique(),
         {
-          Title,
-          Content,
-          featuredImage,
-          status,
-          userId,
+          name,
+          genre,
+          price,
+          totalSale,
+          createdAt,
+          image
         }
       )
     } catch (error) {
@@ -34,17 +36,19 @@ export class Service {
     }
   }
 
-  async updatePost(slug, { Title, Content, featuredImage, status }) {
+  async updateBook(id, { name,genre,price,totalSale,createdAt,image }) {
     try {
       await this.databases.updateDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
-        slug,
+        id,
         {
-          Title,
-          Content,
-          featuredImage,
-          status,
+          name,
+          genre,
+          price,
+          totalSale,
+          createdAt,
+          image
         }
       );
     } catch (error) {
@@ -52,12 +56,12 @@ export class Service {
     }
   }
 
-  async deletePost(slug) {
+  async deleteBook(id) {
     try {
       await this.databases.deleteDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
-        slug
+        id
       );
       return true;
     } catch (error) {
@@ -66,12 +70,12 @@ export class Service {
     }
   }
 
-  async getPost(slug) {
+  async getBook(id) {
     try {
       return await this.databases.getDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
-        slug
+        id
       );
     } catch (error) {
       console.log("Service :: getPost :: error :: ", error);
@@ -79,12 +83,12 @@ export class Service {
     }
   }
 
-  async getPosts(queries = [Query.equal("status","active")]){
+  async getBooks(){
     try {
         return await this.databases.listDocuments(
             conf.appwriteDatabaseId,
             conf.appwriteCollectionId,
-            queries
+            
 
         )
     } catch (error) {

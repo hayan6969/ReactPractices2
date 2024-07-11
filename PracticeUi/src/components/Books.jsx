@@ -7,15 +7,19 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { useNavigate } from 'react-router-dom'
 
 import appwriteService from "../appwrite/config"
 
 import { CirclePlus, Loader2, MoreHorizontal } from "lucide-react"
+import { useForm } from 'react-hook-form'
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+
+import service from '../appwrite/config'
 
 import {
   Card,
@@ -54,6 +58,24 @@ import {
 function Books() {
   const [books, setBooks] = React.useState([])
   const [loading, setLoading] = React.useState(false)
+  const [img, setImg] = React.useState(null)
+  const navigate=useNavigate()
+
+  const {register,handleSubmit}=useForm()
+  const onAddBook=async(data)=>{
+    setBookUpload(true)
+    const file =data.image[0] ? await service.uploadFile(data.image[0]) : null
+    console.log('file is ',file)
+
+    if(file){
+     const uploadedData= await service.addBook({...data,image:file.$id,createdAt: new Date().toLocaleString()})
+     if(uploadedData){
+        setBookUpload(false)
+        navigate('/products')
+
+     }
+    }
+  }
 
   useEffect(()=>{
     setLoading(true)
@@ -62,6 +84,10 @@ function Books() {
       setBooks(res.documents)
     }).finally(()=>setLoading(false))
   },[])
+
+const [bookUpload, setBookUpload] = React.useState(false)
+
+ 
   return (
     <div className='h-[500px] font-kanit  max-sm:h-[700px] p-2 '>    
 
@@ -84,7 +110,7 @@ function Books() {
   Add Books</Button> */}
   <Dialog>
       <DialogTrigger asChild>
-        <Button >
+        <Button className="text-white" >
           <CirclePlus className="h-5 w-5 mr-2" />
           Add Books</Button>
       </DialogTrigger>
@@ -95,25 +121,28 @@ function Books() {
             Enter Book details
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+<form onSubmit={handleSubmit(onAddBook)} >
+<div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
               Name
             </Label>
             <Input
               id="name"
-              defaultValue="Pedro Duarte"
+              
               className="col-span-3"
+              {...register('name',{required:true})}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
+            <Label htmlFor="genre" className="text-right">
               Genre
             </Label>
             <Input
-              id="username"
-              defaultValue="@peduarte"
+              id="genre"
+              
               className="col-span-3"
+              {...register('genre',{required:true})}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -122,8 +151,9 @@ function Books() {
             </Label>
             <Input
               id="price"
-              defaultValue="@peduarte"
+              
               className="col-span-3"
+              {...register('price',{required:true})}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -132,14 +162,35 @@ function Books() {
             </Label>
             <Input
               id="totalSale"
-              defaultValue="@peduarte"
+              
               className="col-span-3"
+              {...register('totalSale',{required:true})}
             />
           </div>
+          <div className="grid grid-cols-4  items-center gap-4">
+          <Label htmlFor="picture" className="text-right">Picture</Label>
+          <Input id="picture" className="col-span-3 "  {...register("image",{required:true})} type="file" />
+          </div>
+          {img && <div className='border-2  w-[50%] flex justify-center h-[110px] overflow-hidden  items-center mx-auto '>
+            
+            <img   
+                            alt="Product img"
+                            className="aspect-square rounded-md object-cover "
+                            height="100%"
+                            src={img}
+                            width="100%"
+                          />
+             </div>
+                          }
         </div>
         <DialogFooter>
-          <Button type="submit">Save Book</Button>
+          <Button disabled={bookUpload} type="submit">
+            {bookUpload ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+            Save Book</Button>
         </DialogFooter>
+</form>
+
+        
       </DialogContent>
     </Dialog>
 </div>
@@ -154,7 +205,7 @@ function Books() {
     <Card className="mt-3 ">
                 <CardHeader>
                   <CardTitle >Books</CardTitle>
-                  <CardDescription>
+                  <CardDescription >
                     Manage your books and view their sales performance.
                   </CardDescription>
                 </CardHeader>
@@ -166,7 +217,7 @@ function Books() {
                           <span className="sr-only">img</span>
                         </TableHead>
                         <TableHead>Name</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead>Genre</TableHead>
                         <TableHead className="hidden md:table-cell">
                           Price
                         </TableHead>
@@ -188,13 +239,13 @@ function Books() {
                       books.map((book)=>{
                         
                               
-                     return   <TableRow>
+                     return   <TableRow key={book.name}>
                         <TableCell className="hidden sm:table-cell">
                           <img
                             alt="Product img"
                             className="aspect-square rounded-md object-cover"
                             height="64"
-                            src={book.image}
+                            src={service.getImagePreview(book.image)}
                             width="64"
                           />
                         </TableCell>
@@ -202,13 +253,13 @@ function Books() {
                           {book.name}
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline">{book.genre}</Badge>
+                          <Badge variant="outline" className='font-normal'>{book.genre}</Badge>
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          {book.price}
+                          {book.price} $
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          {book.totalSale}
+                          {book.totalSale} $
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                           {book.createdAt}

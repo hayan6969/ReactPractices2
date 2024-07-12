@@ -61,17 +61,26 @@ function Books() {
   const [img, setImg] = React.useState(null)
   const navigate=useNavigate()
 
-  const {register,handleSubmit}=useForm()
+  const {register,handleSubmit,reset}=useForm()
   const onAddBook=async(data)=>{
     setBookUpload(true)
     const file =data.image[0] ? await service.uploadFile(data.image[0]) : null
     console.log('file is ',file)
 
     if(file){
+      console.log('now will add book')
      const uploadedData= await service.addBook({...data,image:file.$id,createdAt: new Date().toLocaleString()})
      if(uploadedData){
+      console.log('book added successfully')
         setBookUpload(false)
-        navigate('/products')
+        reset()
+
+        setLoading(true)
+    appwriteService.getBooks().then((res)=>{
+      console.log(res.documents)
+      setBooks(res.documents)
+    }).finally(()=>setLoading(false))
+        
 
      }
     }

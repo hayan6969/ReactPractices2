@@ -3,7 +3,7 @@ import React,{useState,useEffect} from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-function AuthLayout({children,authentication=false
+function AuthLayout({children,authentication=true
 }) {
     const Navigate = useNavigate()
     const [loader,setLoader] = useState(true)

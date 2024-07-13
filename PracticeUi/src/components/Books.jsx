@@ -53,13 +53,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import EditDialogue from './EditDialogue'
 
 
 function Books() {
   const [books, setBooks] = React.useState([])
   const [loading, setLoading] = React.useState(false)
-  const [img, setImg] = React.useState(null)
-  const navigate=useNavigate()
+  const [changed, setChanged] = React.useState(false)
+
 
   const {register,handleSubmit,reset}=useForm()
   const onAddBook=async(data)=>{
@@ -87,12 +88,13 @@ function Books() {
   }
 
   useEffect(()=>{
+    console.log(changed)
     setLoading(true)
     appwriteService.getBooks().then((res)=>{
       console.log(res.documents)
       setBooks(res.documents)
     }).finally(()=>setLoading(false))
-  },[])
+  },[changed])
 
 const [bookUpload, setBookUpload] = React.useState(false)
 
@@ -113,10 +115,7 @@ const [bookUpload, setBookUpload] = React.useState(false)
   </BreadcrumbList>
 </Breadcrumb>
 
-{/* <Button className="">
-  <CirclePlus className="h-5 w-5 mr-2" />
-  
-  Add Books</Button> */}
+
   <Dialog>
       <DialogTrigger asChild>
         <Button className="text-white" >
@@ -180,17 +179,7 @@ const [bookUpload, setBookUpload] = React.useState(false)
           <Label htmlFor="picture" className="text-right">Picture</Label>
           <Input id="picture" className="col-span-3 "  {...register("image",{required:true})} type="file" />
           </div>
-          {img && <div className='border-2  w-[50%] flex justify-center h-[110px] overflow-hidden  items-center mx-auto '>
-            
-            <img   
-                            alt="Product img"
-                            className="aspect-square rounded-md object-cover "
-                            height="100%"
-                            src={img}
-                            width="100%"
-                          />
-             </div>
-                          }
+         
         </div>
         <DialogFooter>
           <Button disabled={bookUpload} type="submit">
@@ -272,6 +261,7 @@ const [bookUpload, setBookUpload] = React.useState(false)
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                           {book.createdAt}
+
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>
@@ -287,8 +277,18 @@ const [bookUpload, setBookUpload] = React.useState(false)
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                              <EditDialogue name={book.name} setChanged={setChanged} totalSale={book.totalSale} price={book.price} id={book.$id} genre={book.genre} />
+
+                              <DropdownMenuItem onClick={()=>{
+                                service.deleteBook(book.$id).then(()=>{
+                                  setLoading(true)
+                                  appwriteService.getBooks().then((res)=>{
+                                    console.log(res.documents)
+                                    setBooks(res.documents)
+                                  }).finally(()=>setLoading(false))
+                                })
+                              
+                              }} >Delete</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>

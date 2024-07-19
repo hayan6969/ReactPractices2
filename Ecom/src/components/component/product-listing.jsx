@@ -27,11 +27,30 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { useEffect } from "react";
 import { useState } from "react";
+import service from "backend/config";
 
 
 
-export function ProductListing({ products }) {
-  const [products1, setProducts1] = useState([])
+export function ProductListing() {
+  const [products, setProducts] = useState([])
+
+  useEffect(()=>{
+    try {
+
+      const fetchData = async()=>{
+        const response = await service.getProductList()
+        console.log("App :: response :: ", response.data.data.products);
+        setProducts (response.data.data.products)
+        console.log("the final products are",products)
+        console.log("done")
+      }
+
+      fetchData()
+      
+    } catch (error) {
+      console.log("App :: error :: ", error);
+    }
+  },[])
 
 
 

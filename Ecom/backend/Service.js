@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 export class Service{
 
     BaseUrl="http://localhost:8080/api/v1"
@@ -34,5 +33,5 @@ export class Service{
 
 }
 
-const service = new Service()
-export default service
+const useService = new Service()
+export default useService

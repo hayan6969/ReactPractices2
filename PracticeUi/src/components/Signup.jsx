@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label"
 import { useDispatch } from "react-redux"
 
 import { login } from "@/store/authSlice"
+import bAuth from "@/backend/auth"
 
 
 
@@ -32,9 +33,11 @@ const onSignup=async()=>{
   try {
     console.log(emailRef.current.value,passwordRef.current.value,nameRef.current.value)
     setLoading(true)
-    const userData=await authService.createAccount(emailRef.current.value,passwordRef.current.value,nameRef.current.value)
+    // const userData=await authService.createAccount(emailRef.current.value,passwordRef.current.value,nameRef.current.value)
+    const userData = await bAuth.signUp(emailRef.current.value,passwordRef.current.value,nameRef.current.value)
+    
     if(userData){
-      const userData=await authService.getCurrentUser()
+      const userData=await bAuth.getCurrentUser()
       if(userData){
         console.log('the user Data is')
         dispatch(login(userData))

@@ -14,6 +14,7 @@ import { useEffect, useRef,useState } from "react"
 import authService from "@/appwrite/auth"
 import { Loader2 } from "lucide-react"
 import { login } from "@/store/authSlice"
+import bAuth from "@/backend/auth"
 
 export function LoginForm() {
   const navigate=useNavigate()
@@ -25,9 +26,9 @@ export function LoginForm() {
 const onLogin=async()=>{
   try {
     setLoading(true)
-    const userData=await authService.login(emailRef.current.value,passwordRef.current.value)
+    const userData=await bAuth.Login(emailRef.current.value,passwordRef.current.value)
     if(userData){
-      const userData=await authService.getCurrentUser()
+      const userData=await bAuth.getCurrentUser()
       if(userData){
         dispatch(login(userData))
         navigate('/')

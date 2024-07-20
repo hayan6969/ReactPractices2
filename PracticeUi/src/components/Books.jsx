@@ -7,7 +7,16 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { useNavigate } from 'react-router-dom'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useRef } from 'react'
 
 import appwriteService from "../appwrite/config"
 
@@ -55,41 +64,53 @@ import {
 } from "@/components/ui/dialog"
 import EditDialogue from './EditDialogue'
 import bConfig from '@/backend/config'
+import { Textarea } from './ui/textarea'
 
 
 function Books() {
+  const categoriesRef = useRef()
   const [books, setBooks] = React.useState([])
   const [loading, setLoading] = React.useState(false)
   const [changed, setChanged] = React.useState(false)
+  const [categories, setCategories] = React.useState([])
+  let category = null
 
 
   const {register,handleSubmit,reset}=useForm()
   const onAddBook=async(data)=>{
     setBookUpload(true)
-    const file =data.image[0] ? await service.uploadFile(data.image[0]) : null
-    console.log('file is ',file)
+    // const file =data.image[0] ? await service.uploadFile(data.image[0]) : null
+    // console.log('file is ',file)
 
-    if(file){
-      console.log('now will add book')
-     const uploadedData= await service.addBook({...data,image:file.$id,createdAt: new Date().toLocaleString()})
+    
+   
+     const uploadedData= await bConfig.addBook({book:{price:Number(data.price),category, stock:Number(data.stock),name:data.name,description:data.description,mainImage:data.mainImage[0]}})
      if(uploadedData){
       console.log('book added successfully')
         setBookUpload(false)
         reset()
 
         setLoading(true)
-    appwriteService.getBooks().then((res)=>{
-      console.log(res.documents)
-      setBooks(res.documents)
+    bConfig.getBooks.then((res)=>{
+      console.log(res)
+      setBooks(res)
     }).finally(()=>setLoading(false))
         
 
      }
-    }
+    
   }
   useEffect(()=>{
     console.log("books are ",books)
   },[books])
+
+  useEffect(()=>{
+    bConfig.getCategories().then((res)=>{
+      console.log(res)
+      setCategories(res)
+
+    })
+  },[])
 
   useEffect(()=>{
     console.log(changed)
@@ -151,14 +172,30 @@ const [bookUpload, setBookUpload] = React.useState(false)
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="genre" className="text-right">
-              Genre
+              Category
             </Label>
-            <Input
-              id="genre"
-              
-              className="col-span-3"
-              {...register('genre',{required:true})}
-            />
+            <Select onValueChange={(e)=>{category=e
+              console.log('category is ',category)
+            }}   className="col-span-3" >
+      <SelectTrigger className="w-[180px]">
+        <SelectValue   placeholder="Select a category" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup className='h-[200px] overflow-y-auto'>
+          <SelectLabel>Category</SelectLabel>
+          
+            {
+              categories && categories.map((category)=>{
+                return           <SelectItem key={category._id} value={category._id}>{category.name}</SelectItem>
+
+              })
+            }
+          
+          
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+           
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="price" className="text-right">
@@ -173,18 +210,24 @@ const [bookUpload, setBookUpload] = React.useState(false)
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="totalSale" className="text-right">
-              Total Sale
+              Description
+            </Label>
+            <Textarea {...register('description',{required:true})} className="col-span-3 " placeholder="Enter the Description"/>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="price" className="text-right">
+              Stock
             </Label>
             <Input
-              id="totalSale"
+              id="stock"
               
               className="col-span-3"
-              {...register('totalSale',{required:true})}
+              {...register('stock',{required:true})}
             />
           </div>
           <div className="grid grid-cols-4  items-center gap-4">
           <Label htmlFor="picture" className="text-right">Picture</Label>
-          <Input id="picture" className="col-span-3 "  {...register("image",{required:true})} type="file" />
+          <Input id="picture" className="col-span-3 "  {...register("mainImage",{required:true})} type="file" />
           </div>
          
         </div>
@@ -194,6 +237,8 @@ const [bookUpload, setBookUpload] = React.useState(false)
             Save Book</Button>
         </DialogFooter>
 </form>
+
+<Button onClick={onAddBook}>Click</Button>
 
         
       </DialogContent>

@@ -14,8 +14,8 @@ async getBooks(){
         
         const response = await axiosNormal.get("/ecommerce/products")
         if(response){
-            console.log("Books fetched : ",response)
-            return response.data.data
+            console.log("Books fetched : ",response.data.data.products)
+            return response.data.data.products
         }
         
     } catch (error) {

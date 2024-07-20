@@ -17,6 +17,8 @@ import AuthLayout from './components/layouts/AuthLayout';
 import { useDispatch } from 'react-redux';
 import { login } from './store/authSlice';
 import authService from './appwrite/auth';
+import bAuth from './backend/auth';
+import { set } from 'react-hook-form';
 
 
 function App() {
@@ -26,18 +28,13 @@ function App() {
 
  useEffect(()=>{
   setLoader(true)
-  authService.getCurrentUser().then((userData)=>{
-    if(userData){
-      dispatch(login(userData))
-      navigate('/')
-      setLoader(false)
-    }
-    else{
-      navigate('/login')
-      setLoader(false)
-    }
+  const res = bAuth.getCurrentUser()
+  if(res){
+    dispatch(login(res))
+    navigate('/')
+    setLoader(false)
+  }
   
-  })
 
  },[])
 

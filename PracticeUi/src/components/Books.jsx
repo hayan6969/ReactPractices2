@@ -54,6 +54,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import EditDialogue from './EditDialogue'
+import bConfig from '@/backend/config'
 
 
 function Books() {
@@ -86,14 +87,20 @@ function Books() {
      }
     }
   }
+  useEffect(()=>{
+    console.log("books are ",books)
+  },[books])
 
   useEffect(()=>{
     console.log(changed)
     setLoading(true)
-    appwriteService.getBooks().then((res)=>{
-      console.log(res.documents)
-      setBooks(res.documents)
-    }).finally(()=>setLoading(false))
+    bConfig.getBooks().then((res)=>{
+      if(res){
+        setBooks(res)
+        setLoading(false)
+      }
+    })
+    
   },[changed])
 
 const [bookUpload, setBookUpload] = React.useState(false)
@@ -215,7 +222,7 @@ const [bookUpload, setBookUpload] = React.useState(false)
                           <span className="sr-only">img</span>
                         </TableHead>
                         <TableHead>Name</TableHead>
-                        <TableHead>Genre</TableHead>
+                        <TableHead>Stock</TableHead>
                         <TableHead className="hidden md:table-cell">
                           Price
                         </TableHead>
@@ -233,7 +240,7 @@ const [bookUpload, setBookUpload] = React.useState(false)
                     <TableBody>
                      
                       
-                     {
+                     { books &&
                       books.map((book)=>{
                         
                               
@@ -243,7 +250,7 @@ const [bookUpload, setBookUpload] = React.useState(false)
                             alt="Product img"
                             className="aspect-square rounded-md object-cover"
                             height="64"
-                            src={service.getImagePreview(book.image)}
+                            src={book.mainImage.url}
                             width="64"
                           />
                         </TableCell>
@@ -251,13 +258,13 @@ const [bookUpload, setBookUpload] = React.useState(false)
                           {book.name}
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className='font-normal'>{book.genre}</Badge>
+                          <Badge variant="outline" className='font-normal'>{book.stock}</Badge>
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                           {book.price} $
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          {book.totalSale} $
+                          {book.price} $
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                           {book.createdAt}
